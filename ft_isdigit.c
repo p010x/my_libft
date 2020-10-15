@@ -6,11 +6,11 @@
 /*   By: pcottet <pcottet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/12 17:23:03 by pcottet           #+#    #+#             */
-/*   Updated: 2020/10/13 03:30:42 by pcottet          ###   ########.fr       */
+/*   Updated: 2020/10/16 01:07:43 by pcottet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-int         ft_isdigit(int c)
+int			ft_isdigit(int c)
 {
-    return ((c >= '0' && c <= '9') ? 1 : 0);
+	return ((c >= '0' && c <= '9') ? 1 : 0);
 }

@@ -6,11 +6,11 @@
 /*   By: pcottet <pcottet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/12 17:47:03 by pcottet           #+#    #+#             */
-/*   Updated: 2020/10/13 03:18:34 by pcottet          ###   ########.fr       */
+/*   Updated: 2020/10/16 01:21:32 by pcottet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-int         ft_tolower(int c)
+int			ft_tolower(int c)
 {
-    return ((c >= 'A' && c <= 'Z') ? (c + ('a' - 'A')) : c);
+	return ((c >= 'A' && c <= 'Z') ? (c + ('a' - 'A')) : c);
 }

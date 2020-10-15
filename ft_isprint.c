@@ -6,11 +6,11 @@
 /*   By: pcottet <pcottet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/12 17:34:21 by pcottet           #+#    #+#             */
-/*   Updated: 2020/10/13 03:30:11 by pcottet          ###   ########.fr       */
+/*   Updated: 2020/10/16 01:08:02 by pcottet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-int         ft_isprint(int c)
+int			ft_isprint(int c)
 {
-    return ((c >= ' ' && c <= '~') ? 1 : 0);
+	return ((c >= ' ' && c <= '~') ? 1 : 0);
 }

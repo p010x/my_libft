@@ -6,11 +6,11 @@
 /*   By: pcottet <pcottet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/12 17:31:57 by pcottet           #+#    #+#             */
-/*   Updated: 2020/10/13 03:17:47 by pcottet          ###   ########.fr       */
+/*   Updated: 2020/10/16 01:07:23 by pcottet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-int         ft_isascii(int c)
+int			ft_isascii(int c)
 {
-    return ((c >= 0 && c <= 177) ? 1 : 0);
+	return ((c >= 0 && c <= 177) ? 1 : 0);
 }
