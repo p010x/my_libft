@@ -6,7 +6,7 @@
 #    By: pcottet <pcottet@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/10/12 11:10:28 by pcottet           #+#    #+#              #
-#    Updated: 2020/10/13 04:43:29 by pcottet          ###   ########.fr        #
+#    Updated: 2020/10/14 14:49:12 by pcottet          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -25,49 +25,61 @@ SRC_STR_TO	= ft_toupper.c ft_tolower.c ft_atoi.c ft_itoa.c
 SRC_PUT		= ft_putchar_fd.c ft_putstr_fd.c ft_putendl_fd.c		\
 			ft_putnbr_fd.c
 
-SRC_MEM		= ft_memset ft_bzero.c ft_calloc ft_memcpy.c			\
+# SRC_MEM		= ft_memset ft_bzero.c ft_calloc ft_memcpy.c			\
 			ft_memccpy.c ft_memmove.c ft_memchr.c ft_memcmp.c
 
-SRC_BONUS	= ft_lstnew.c ft_lstadd_front.c ft_lstsize.c			\
+SRC_LIST	= ft_lstnew.c ft_lstadd_front.c ft_lstsize.c			\
 			ft_lstlast.c ft_lstadd_back.c ft_lstdelone.c			\
 			ft_lstclear.c ft_lstiter.c ft_lstmap.c
 
 SRCS		= ${SRC_STR} ${SRC_STR_IS} ${SRC_STR_TO} ${SRC_PUT}		\
 			${SRC_MEM}
 
+SRCS_BONUS	= ${SRC_LIST}
+
 OBJS		= ${SRCS:.c=.o}
 
 OBJS_BONUS	= ${SRC_BONUS:.c=.o}
 
-INCL	= -include libft.h
+INCL		= -include libft.h
 
-CC		= gcc
+CC			= gcc
 
-AR		= ar rc
+AR			= ar rc
 
-RM		= rm -f
+RM			= rm -f
 
-CFLAGS	= -Wall -Wextra -Werror
+CFLAGS		= -Wall -Wextra -Werror
 
-.c.o:
-			${CC} ${CFLAGS} ${INCL} -c $< -o ${<:.c=.o}
+COUNT 		= 1
 
 ${NAME}:	${OBJS}
-			${AR} ${NAME} ${OBJS}
-			ranlib ${NAME}
+			@${AR} ${NAME} $^
+			@ranlib ${NAME}
+			@echo "Done !"
+			@echo "Library built\n----------------"
 
-all:		${NAME}
+.c.o:
+			@echo -n .
+			@${CC} ${CFLAGS} ${INCL} -c $< -o ${<:.c=.o}
+
+all:		${NAME} bonus
+			@echo "Library and bonuses built\n----------------"
 
 bonus:		${OBJS_BONUS}
-			${AR} ${NAME} ${OBJS}
+			${AR} ${NAME} $^
 			ranlib ${NAME}
+			@echo "Bonuses built\n----------------"
 
 clean:
-			${RM} ${OBJS} ${OBJS_BONUS}
+			@${RM} ${OBJS} ${OBJS_BONUS}
+			@echo "Objects cleaned\n----------------"
 
 fclean:		clean
-			${RM} ${NAME}
+			@${RM} ${NAME}
+			@echo "File cleaned\n----------------"
 
-re:			fclean all 
+re:			fclean ${NAME}
+			@echo "All Done"
 
-.PHONY:		all clean fclean re ${NAME} bonus
+.PHONY:		all clean fclean re bonus

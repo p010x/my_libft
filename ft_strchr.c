@@ -6,7 +6,7 @@
 /*   By: pcottet <pcottet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/12 18:08:18 by pcottet           #+#    #+#             */
-/*   Updated: 2020/10/13 03:36:09 by pcottet          ###   ########.fr       */
+/*   Updated: 2020/10/13 05:39:44 by pcottet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,8 @@ char        *ft_strchr(const char *s, int c)
     while (s[i])
     {
         if (s[i] == c)
-            return (&s[i]);
+            return ((char *)&s[i]);
         i++;
     }
-    return ((s[i] == c) ? &s[i] : NULL);
+    return ((s[i] == c) ? (char *)&s[i] : NULL);
 }

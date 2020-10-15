@@ -6,7 +6,7 @@
 /*   By: pcottet <pcottet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/13 00:21:36 by pcottet           #+#    #+#             */
-/*   Updated: 2020/10/13 03:10:46 by pcottet          ###   ########.fr       */
+/*   Updated: 2020/10/13 05:44:19 by pcottet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ int         ft_atoi(const char *str)
         i++;
     else if (str[i] == '-')
     {
-        -sign;
+        sign = -sign;
         i++;
     }
     while (ft_isdigit(str[i]))

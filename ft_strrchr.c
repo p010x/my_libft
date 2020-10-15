@@ -6,11 +6,11 @@
 /*   By: pcottet <pcottet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/12 18:18:18 by pcottet           #+#    #+#             */
-/*   Updated: 2020/10/12 18:34:03 by pcottet          ###   ########.fr       */
+/*   Updated: 2020/10/13 05:40:32 by pcottet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-char        *ft_strchr(const char *s, int c)
+char        *ft_strrchr(const char *s, int c)
 {
     int     i;
     char    *last_c;
@@ -20,10 +20,10 @@ char        *ft_strchr(const char *s, int c)
     while (s[i])
     {
         if (s[i] == c)
-            last_c = &s[i];
+            last_c = (char *)&s[i];
         i++;
     }
     if (s[i] == c)
-        last_c = &s[i];
+        last_c = (char *)&s[i];
     return (last_c);
 }
