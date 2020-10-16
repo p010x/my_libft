@@ -6,7 +6,7 @@
 #    By: pcottet <pcottet@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/10/12 11:10:28 by pcottet           #+#    #+#              #
-#    Updated: 2020/10/14 14:49:12 by pcottet          ###   ########.fr        #
+#    Updated: 2020/10/16 10:11:17 by pcottet          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -25,54 +25,68 @@ SRC_STR_TO	= ft_toupper.c ft_tolower.c ft_atoi.c ft_itoa.c
 SRC_PUT		= ft_putchar_fd.c ft_putstr_fd.c ft_putendl_fd.c		\
 			ft_putnbr_fd.c
 
-# SRC_MEM		= ft_memset ft_bzero.c ft_calloc ft_memcpy.c			\
+SRC_MEM		= ft_memset.c ft_bzero.c ft_calloc.c ft_memcpy.c			\
 			ft_memccpy.c ft_memmove.c ft_memchr.c ft_memcmp.c
 
 SRC_LIST	= ft_lstnew.c ft_lstadd_front.c ft_lstsize.c			\
 			ft_lstlast.c ft_lstadd_back.c ft_lstdelone.c			\
-			ft_lstclear.c ft_lstiter.c ft_lstmap.c
+			ft_lstclear.c ft_lstiter.c
 
 SRCS		= ${SRC_STR} ${SRC_STR_IS} ${SRC_STR_TO} ${SRC_PUT}		\
 			${SRC_MEM}
 
 SRCS_BONUS	= ${SRC_LIST}
 
-OBJS		= ${SRCS:.c=.o}
+ifeq (${MAKECMDGOALS}, ${filter ${MAKECMDGOALS}, all reall})
+	OBJS		= ${SRCS:.c=.o}
 
-OBJS_BONUS	= ${SRC_BONUS:.c=.o}
+	OBJS		+= ${SRCS_BONUS:.c=.o}
 
+	TARGET		= Library and bonus
+
+	TOTAL		= 43
+
+else ifeq (${MAKECMDGOALS}, bonus)
+	OBJS		= ${SRCS_BONUS:.c=.o}
+
+	TARGET		= Bonus
+
+	TOTAL		= 9
+
+else
+	OBJS		= ${SRCS:.c=.o}
+
+	TARGET		= Library
+
+	TOTAL		= 34
+endif
+
+COUNT		= 1
 INCL		= -include libft.h
-
 CC			= gcc
-
 AR			= ar rc
-
 RM			= rm -f
-
 CFLAGS		= -Wall -Wextra -Werror
-
-COUNT 		= 1
+NO_COLOR     := \x1b[0m
+OK_COLOR     := \x1b[32;01m
 
 ${NAME}:	${OBJS}
-			@${AR} ${NAME} $^
+			@${AR} ${NAME} ${OBJS}
 			@ranlib ${NAME}
-			@echo "Done !"
-			@echo "Library built\n----------------"
+			@echo "\n$(OK_COLOR)Done ✓"
+			@echo "${TARGET} built$(NO_COLOR)\n----------------"
 
 .c.o:
-			@echo -n .
+			@echo -n '${COUNT}/${TOTAL} '
 			@${CC} ${CFLAGS} ${INCL} -c $< -o ${<:.c=.o}
+			$(eval COUNT=$(shell echo $$(($(COUNT)+1))))
 
-all:		${NAME} bonus
-			@echo "Library and bonuses built\n----------------"
+bonus:		${NAME}
 
-bonus:		${OBJS_BONUS}
-			${AR} ${NAME} $^
-			ranlib ${NAME}
-			@echo "Bonuses built\n----------------"
+all:		${NAME}
 
 clean:
-			@${RM} ${OBJS} ${OBJS_BONUS}
+			@${RM} *.o
 			@echo "Objects cleaned\n----------------"
 
 fclean:		clean
@@ -80,6 +94,10 @@ fclean:		clean
 			@echo "File cleaned\n----------------"
 
 re:			fclean ${NAME}
-			@echo "All Done"
 
-.PHONY:		all clean fclean re bonus
+reall:		fclean all
+
+test:
+			${CC} -fsanitize=address -L. -lft main.c && ./a.out
+
+.PHONY:		all clean fclean re bonus reall
