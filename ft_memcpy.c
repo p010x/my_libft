@@ -6,7 +6,7 @@
 /*   By: pcottet <pcottet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/14 14:58:21 by pcottet           #+#    #+#             */
-/*   Updated: 2020/10/16 01:30:37 by pcottet          ###   ########.fr       */
+/*   Updated: 2020/10/16 03:11:22 by pcottet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,18 @@
 
 void		*ft_memcpy(void *dst, const void *src, size_t n)
 {
-	size_t	i;
+	unsigned char			*dst_tmp;
+	const unsigned char		*src_tmp;
+	size_t					i;
 
+	if (!dst || !src)
+		return (NULL);
+	dst_tmp = dst;
+	src_tmp = src;
 	i = 0;
 	while (n--)
 	{
-		dst[i] = src[i];
+		dst_tmp[i] = src_tmp[i];
 		i++;
 	}
 	return (dst);

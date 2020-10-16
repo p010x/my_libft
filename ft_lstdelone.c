@@ -6,7 +6,7 @@
 /*   By: pcottet <pcottet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/14 16:43:02 by pcottet           #+#    #+#             */
-/*   Updated: 2020/10/16 01:11:17 by pcottet          ###   ########.fr       */
+/*   Updated: 2020/10/16 03:36:13 by pcottet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ void		ft_lstdelone(t_list *lst, void (*del)(void *))
 {
 	if (del && del)
 	{
-		del(lst.content);
+		del(lst->content);
 		free(lst);
 	}
 }
