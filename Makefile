@@ -6,7 +6,7 @@
 #    By: pcottet <pcottet@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/10/12 11:10:28 by pcottet           #+#    #+#              #
-#    Updated: 2020/10/16 10:11:17 by pcottet          ###   ########.fr        #
+#    Updated: 2020/10/16 16:53:15 by pcottet          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -98,6 +98,8 @@ re:			fclean ${NAME}
 reall:		fclean all
 
 test:
-			${CC} -fsanitize=address -L. -lft main.c && ./a.out
+			@${CC} -fsanitize=address -L. -lft main.c check_diff_error.c && ./a.out
+# echo "You can run a.out to test everything or select which part you want to test with one of those arguments:\n"
+# echo "STR STR_IS STR_TO PUT MEM\nBONUS MORE"
 
 .PHONY:		all clean fclean re bonus reall
