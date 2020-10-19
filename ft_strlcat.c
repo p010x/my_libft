@@ -6,7 +6,7 @@
 /*   By: pcottet <pcottet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/12 19:44:19 by pcottet           #+#    #+#             */
-/*   Updated: 2020/10/16 01:18:18 by pcottet          ###   ########.fr       */
+/*   Updated: 2020/10/18 21:44:14 by pcottet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,8 @@ size_t		ft_strlcat(char *dst, const char *src, size_t dstsize)
 	size_t	dst_len;
 	size_t	i;
 
+	if (!dst && src)
+		return (ft_strlen(src));
 	i = 0;
 	dst_len = ft_strlen(dst);
 	ret_value = ft_strlen(src) + ((dstsize <= dst_len) ? dstsize : dst_len);

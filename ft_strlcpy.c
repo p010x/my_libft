@@ -6,7 +6,7 @@
 /*   By: pcottet <pcottet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/12 18:48:08 by pcottet           #+#    #+#             */
-/*   Updated: 2020/10/16 01:18:30 by pcottet          ###   ########.fr       */
+/*   Updated: 2020/10/18 23:05:47 by pcottet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,13 +19,12 @@ size_t		ft_strlcpy(char *dst, const char *src, size_t dstsize)
 	i = 0;
 	if (!dst || !src)
 		return (0);
-	while (src[i])
+	while (src[i] && dstsize && i < dstsize - 1)
 	{
-		if (i < dstsize - 1 && dstsize)
-			dst[i] = src[i];
-		else if (i == dstsize - 1 && dstsize)
-			dst[i] = '\0';
+		dst[i] = src[i];
 		i++;
 	}
-	return (i);
+	if (dstsize)
+		dst[i] = '\0';
+	return (ft_strlen(src));
 }
