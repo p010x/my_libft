@@ -6,7 +6,7 @@
 #    By: pcottet <pcottet@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/10/12 11:10:28 by pcottet           #+#    #+#              #
-#    Updated: 2020/10/19 02:48:28 by pcottet          ###   ########.fr        #
+#    Updated: 2020/10/19 21:31:56 by pcottet          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -106,6 +106,7 @@ list:
 \t- all->(Build Library and Bonus)\n\t- reall->(fclean then all)\n\t- test->(Build libft with main.c, check_diff_error.c and fsanitize g3)"
 
 test:
+#@${CC} -fsanitize=address -fsanitize=undefined -g3 -L. -lft main.c && ./a.out
 			@${CC} -fsanitize=address -g3 -L. -lft main.c check_diff_error.c && ./a.out
 # echo "You can run a.out to test everything or select which part you want to test with one of those arguments:\n"
 # echo "STR STR_IS STR_TO PUT MEM\nBONUS MORE"

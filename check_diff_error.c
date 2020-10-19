@@ -6,7 +6,7 @@
 /*   By: pcottet <pcottet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/16 15:29:14 by pcottet           #+#    #+#             */
-/*   Updated: 2020/10/19 02:42:37 by pcottet          ###   ########.fr       */
+/*   Updated: 2020/10/19 21:47:56 by pcottet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -365,11 +365,83 @@ else if (!strcmp("ft_strjoin", ft_name))
 	if (sigsetjmp(mark,1) != 0)
 	{
 		printf(" -> option: %d (str1: \"%s\" str2: \"%s\")", option, str1, str2);
+		return (1);
+    }
+	else
+	{
+		ft_strjoin(str1, str2);
+	}
+	return (option ? check_diff_error("ft_strjoin", --option) : -1);
+}
+else if (!strcmp("ft_substr", ft_name))
+{
+	switch (option)
+	{
+		case 1:
+		{
+			str1 = not_null_str;
+			break;
+		}
+		case 0:
+			break;
+		default:
+		{
+			printf("Error no matched case in switch");
+			break;
+		}
+	}
+	if (sigsetjmp(mark,1) != 0)
+	{
+		printf(" -> option: %d (str1: \"%s\" start: \"15\" len: \"15\")", option, str1);
 			return (1);
     }
 	else
-		ft_strjoin(str1, str2);
-	return (option ? check_diff_error("ft_strjoin", --option) : -1);
+		ft_substr(str1, 15, 3);
+	return (option ? check_diff_error("ft_substr", --option) : -1);
+}
+else if (!strcmp("ft_split", ft_name))
+{
+	if (sigsetjmp(mark,1) != 0)
+	{
+		printf(" -> (str1: \'%s\' )", str1);
+		return (1);
+    }
+	else
+		ft_split(str1, '\0');
+	return (option ? check_diff_error("ft_split", --option) : -1);
+}
+else if (!strcmp("ft_strtrim", ft_name))
+{
+	switch (option)
+	{
+		case 2:
+		{
+			str1 = not_null_str;
+			break;
+		}
+		case 1:
+		{
+			str2 = not_null_str;
+			break;
+		}
+		case 0:
+			break;
+		default:
+		{
+			printf("Error no matched case in switch");
+			break;
+		}
+	}
+	if (sigsetjmp(mark,1) != 0)
+	{
+		printf(" -> option: %d -> (str1: \"%s\" str2: \"%s\")", option, str1, str2);
+		return (1);
+    }
+	else
+	{
+		ft_strtrim(str1, str2);
+	}
+	return (option ? check_diff_error("ft_strtrim", --option) : -1);
 }
 else
 	return (0);

@@ -6,7 +6,7 @@
 /*   By: pcottet <pcottet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/16 09:11:17 by pcottet           #+#    #+#             */
-/*   Updated: 2020/10/19 02:41:55 by pcottet          ###   ########.fr       */
+/*   Updated: 2020/10/19 21:46:05 by pcottet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,11 @@
 char	**er_msg = (char *[]){"Unknown fonction name", "KO shouldn't segfault", "KO should segfault"};
 int		er_no;
 int		check_diff_error(char *ft_name, int option);
+// int		check_diff_error(char *ft_name, int option)
+// {
+// 	printf("%s%d", ft_name, option);
+// 	return (-1);
+// }
 
 // ----------STR_IS----------
 int		ft_str_is_test(void)
@@ -197,7 +202,7 @@ int		ft_str_test(void)
 {
 	int		ok = 1;
 	int		ft_ok = 1;
-	int		i, j, k = 0;
+	int		i, j, k, l= 0;
 	// LEN
 	printf("\tTesting ft_strlen\n");
 	char	**strs = (char *[]){"0", "124", "-124", INT_MIN_STR, INT_MAX_STR, "addazd", "", "a1",
@@ -491,6 +496,181 @@ int		ft_str_test(void)
 		printf(" -> %s", er_msg[er_no]);
 	}
 	printf("%s\n", ft_ok ? "\n\tOK" : "\n!!!!!!!!!!ft_strlen: KO");
+	// SUB
+	printf("\tTesting ft_substr\n");
+	int		substr_start[]	= {0, 1, 2, 3, 6, -1};
+	int		substr_len[]	= {0, 1, 2, 3, 6, -1};
+	char	**strs_sub = (char *[]){"", "\0", "1", "abcd", "ABC\0DEFGIJKL", NULL};
+	char	**strs_sub_res0 = (char *[]){"", "", "", "", "", // case 0 0
+										 "", "", "1", "a", "A", // case 0 1
+										 "", "", "1", "ab", "AB", // case 0 2
+										 "", "", "1", "abc", "ABC", // case 0 3
+										 "", "", "1", "abcd", "ABC"}; // case 0 6
+	char	**strs_sub_res1 = (char *[]){"", "", "", "", "", // case 1 0
+										 "", "", "", "b", "B", // case 1 1
+										 "", "", "", "bc", "BC", // case 1 2
+										 "", "", "", "bcd", "BC", // case 1 3
+										 "", "", "", "bcd", "BC"}; // case 1 6
+	char	**strs_sub_res2 = (char *[]){"", "", "", "", "", // case 2 0
+										 "", "", "", "c", "C", // case 2 1
+										 "", "", "", "cd", "C", // case 2 2
+										 "", "", "", "cd", "C", // case 2 3
+										 "", "", "", "cd", "C"}; // case 2 6
+	char	**strs_sub_res3 = (char *[]){"", "", "", "", "", // case 3 0
+										 "", "", "", "d", "", // case 3 1
+										 "", "", "", "d", "", // case 3 2
+										 "", "", "", "d", "", // case 3 3
+										 "", "", "", "d", ""}; // case 3 6
+	char	**strs_sub_res6 = (char *[]){"", "", "", "", "", // case 6 0
+										 "", "", "", "", "", // case 6 1
+										 "", "", "", "", "", // case 6 2
+										 "", "", "", "", "", // case 6 3
+										 "", "", "", "", ""}; // case 6 6
+	char	**strs_all_res[5]	= {strs_sub_res0, strs_sub_res1, strs_sub_res2, strs_sub_res3, strs_sub_res6};
+	char	*str_sub_tmp;
+
+	ft_ok = 1;
+	i = 0;
+	while (substr_start[i] >= 0)
+	{
+		j = 0;
+		l = 0;
+		while (substr_len[j] >= 0)
+		{
+			k = 0;
+			while (strs_sub[k])
+			{
+				str_sub_tmp = ft_substr(strs_sub[k], substr_start[i], substr_len[j]);
+				if (strcmp(strs_all_res[i][l], str_sub_tmp))
+				{
+					printf("KO : s: \'%s\' <-> start: \'%d\' <-> len: \'%d\' -> res: \'%s\' <-> ft_res: \'%s\'\n",
+					strs_sub[k], substr_start[i], substr_len[j], strs_all_res[i][l], str_sub_tmp);
+					ok = 0;
+					ft_ok = 0;
+				}
+				k++;
+				l++;
+			}
+			j++;
+		}
+		i++;
+	}
+	printf("\t\tTesting error handling");
+	er_no = check_diff_error("ft_substr", 1);
+	if (er_no >= 0)
+	{
+		ft_ok = 0;
+		ok = 0;
+		printf(" -> %s", er_msg[er_no]);
+	}
+	printf("%s\n", ft_ok ? "\n\tOK" : "\n!!!!!!!!!!ft_substr: KO");
+	// SPLIT
+	printf("\tTesting ft_split\n");
+	char	str_split[]		= "*Ceci n'est pas une \200ozarabozara.\0abc";
+	char	split_charset[]	= {'*', 'a', 'z', '.', 'c', ' ', -127, '\200', '\0'};
+	int		max_charset		= 9;
+	char	**strs_empty	= (char *[]){"a", "aaaaaaaaaaaa", "", NULL};
+	char	c_split_empty	= 'a';
+	char	**res_empty		= (char *[]){"", NULL};
+	char	**split_res0	= (char *[]){"Ceci n'est pas une \200ozarabozara.", NULL}; // charset '*'
+	char	**split_res1	= (char *[]){"*Ceci n'est p", "s une \200oz", "r", "boz", "r", ".", NULL}; // charset 'a'
+	char	**split_res2	= (char *[]){"*Ceci n'est pas une \200o", "arabo", "ara.", NULL}; // charset 'z'
+	char	**split_res3	= (char *[]){"*Ceci n'est pas une \200ozarabozara", NULL}; // charset '.'
+	char	**split_res4	= (char *[]){"*Ce", "i n'est pas une \200ozarabozara.", NULL}; // charset 'c'
+	char	**split_res5	= (char *[]){"*Ceci" ,"n'est", "pas", "une", "\200ozarabozara.", NULL}; // charset ' '
+	char	**split_res6	= (char *[]){"*Ceci n'est pas une \200ozarabozara.", NULL}; // charset -127
+	char	**split_res7	= (char *[]){"*Ceci n'est pas une ", "ozarabozara.", NULL}; // charset 200
+	char	**split_res8	= (char *[]){"*Ceci n'est pas une \200ozarabozara.", NULL}; // charset '\0'
+	char	**split_allres[9]	= {split_res0, split_res1, split_res2, split_res3,  split_res4,
+							split_res5, split_res6, split_res7, split_res8};
+	char	**split_ft_res;
+
+	ft_ok = 1;
+	i = 0;
+	while (i < max_charset)
+	{
+		split_ft_res = ft_split(str_split, split_charset[i]);
+		j = 0;
+		while (split_allres[i][j])
+		{
+			if ((!split_allres[i][j + 1] && split_ft_res[j + 1]) || (split_allres[i][j + 1] && !split_ft_res[j + 1]) ||
+				strcmp(split_allres[i][j],  split_ft_res[j]))
+			{
+				printf("KO : \"s: \'%s\' <-> charset: \'%c\' -> res: \'%s\' <-> ft_res: \'%s\' -> next_res: \'%s\' next_ft_res: \'%s\' \"\n",
+					str_split, split_charset[i], split_allres[i][j], split_ft_res[j], split_allres[i][j + 1], split_ft_res[j + 1]);
+				ok = 0;
+				ft_ok = 0;
+				break;
+			}
+			j++;
+		}
+		i++;
+	}
+	i = 0;
+	while (strs_empty[i])
+	{
+	char **split_ft_res = ft_split(strs_empty[i], c_split_empty);
+		if (split_ft_res[1] || *split_ft_res[0])
+		{
+			printf("KO : \"s: \'%s\' <-> charset: \'%c\' -> ft_res: \'%s\' should be "" <-> next_ft_res: \'%s\' should be '(null)' \"\n",
+					strs_empty[i], c_split_empty, split_ft_res[0], split_ft_res[1]);
+			ok = 0;
+			ft_ok = 0;
+		}
+		i++;
+	}
+	printf("\t\tTesting error handling");
+	er_no = check_diff_error("ft_split", 0);
+	if (er_no >= 0)
+	{
+		ft_ok = 0;
+		ok = 0;
+		printf(" -> %s", er_msg[er_no]);
+	}
+	printf("%s\n", ft_ok ? "\n\tOK" : "\n!!!!!!!!!!ft_split: KO");
+	// TRIM
+	printf("\tTesting ft_strtrim\n");
+	char	**strs_trim		= (char *[]){"\t\n  \tAAA \t BBB\t\n  \t", "\t\t\n\t\t   ", "", "abc", NULL};
+	char	**strs_trim_res	= (char *[]){"AAA \t BBB", "", "", "abc", NULL};
+	char	*strs_trim_set	= "\t\n\r\v\f ";
+	char	*str_trim_tmp;
+
+	ft_ok = 1;
+	i = 0;
+	while (strs_trim[i])
+	{
+		str_trim_tmp = ft_strtrim(strs_trim[i] , strs_trim_set);
+		if (strcmp(str_trim_tmp, strs_trim_res[i]))
+		{
+			printf("KO : \"s: \'%s\' <-> set: \'%s\' -> res: \'%s\' <-> ft_res: \'%s\' \"\n",
+				strs_trim[i], strs_trim_set, strs_trim_res[i], str_trim_tmp);
+			ok = 0;
+			ft_ok = 0;
+		}
+		i++;
+	}
+	i = 0;
+	while (strs_trim[i])
+	{
+		str_trim_tmp = ft_strtrim(strs_trim[i] , "");
+		if (strcmp(str_trim_tmp, strs_trim[i]))
+		{
+			printf("KO : \"s: \'%s\' <-> set: \'\"\"\' -> res: \'%s\' <-> ft_res: \'%s\' \"\n",
+				strs_trim[i], strs_trim[i], str_trim_tmp);
+			ok = 0;
+			ft_ok = 0;
+		}
+		i++;
+	}
+	printf("\t\tTesting error handling");
+	er_no = check_diff_error("ft_strtrim", 2);
+	if (er_no >= 0)
+	{
+		ft_ok = 0;
+		ok = 0;
+		printf(" -> %s", er_msg[er_no]);
+	}
+	printf("%s\n", ft_ok ? "\n\tOK" : "\n!!!!!!!!!!ft_strtrim: KO");
 	// RETURN VALUE
 	return (ok);
 }
