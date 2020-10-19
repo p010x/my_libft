@@ -6,7 +6,7 @@
 /*   By: pcottet <pcottet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/12 21:38:18 by pcottet           #+#    #+#             */
-/*   Updated: 2020/10/19 21:21:22 by pcottet          ###   ########.fr       */
+/*   Updated: 2020/10/19 21:50:35 by pcottet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,8 @@ char        *ft_strtrim(char const *s1, char const *set)
     int     k;
     char    *ret_str;
 
-    if (!(ret_str = malloc(sizeof(*s1) *
+	set = set ? set : "";
+    if (!s1 || !(ret_str = malloc(sizeof(*s1) *
         (ft_strlen(s1) - ft_count_set(s1, set) + 1))))
         return (NULL);
     i = 0;
