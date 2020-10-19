@@ -6,7 +6,7 @@
 /*   By: pcottet <pcottet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/16 09:11:17 by pcottet           #+#    #+#             */
-/*   Updated: 2020/10/18 14:22:31 by pcottet          ###   ########.fr       */
+/*   Updated: 2020/10/19 02:41:55 by pcottet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,6 +106,7 @@ int		ft_str_is_test(void)
 		i++;
 	}
 	printf("%s\n", ft_ok ? "\tOK" : "\n!!!!!!!!!!isprint: KO");
+	// Return value
 	return (ok);
 }
 // ----------STR_TO----------
@@ -191,23 +192,23 @@ int		ft_str_to_test(void)
 	printf("%s\n", ft_ok ? "\tOK" : "\n!!!!!!!!!!ft_itoa: KO");
 	return (ok);
 }
-
+// ----------STR----------
 int		ft_str_test(void)
 {
 	int		ok = 1;
 	int		ft_ok = 1;
-	int		i = 0;
+	int		i, j, k = 0;
+	// LEN
+	printf("\tTesting ft_strlen\n");
 	char	**strs = (char *[]){"0", "124", "-124", INT_MIN_STR, INT_MAX_STR, "addazd", "", "a1",
 				"1a", "-a1", "\011", "\t+1", "\n-1", "\r1", "\va", "\b", "000000000000000110",
 				"  \t\n  \r\r\v\f-899",	"     32 ", "++876", "\200123", "123\200", "-+1", "+-1",
 				"\n          42 24", "42jk ", "      --s8", " -sfecf", "  +442", "  -4232", NULL};
-	// LEN
-	printf("\tTesting ft_strlen\n");
 	while (strs[i])
 	{
 		if (strlen(strs[i]) != ft_strlen(strs[i]))
 		{
-			printf("KO : \"%s\"\t", strs[i]);
+			printf("KO : \"%s\"\t\n", strs[i]);
 			ok = 0;
 			ft_ok = 0;
 		}
@@ -223,13 +224,15 @@ int		ft_str_test(void)
 	}
 	printf("%s\n", ft_ok ? "\n\tOK" : "\n!!!!!!!!!!ft_strlen: KO");
 	// STRNCMP
+	printf("\tTesting ft_strncmp\n");
 	char	**strs_cmp1 = (char *[]){"\200",	"abc",		"abc",			"ab\0cde",	"q", "", NULL};
 	char	**strs_cmp2 = (char *[]){"\0",		"abcde",	"abc\0defg", 	"abcc\0e",	"a", "", NULL};
 	int		tab_cmp[]	=			{1,			3,			100,			20,			0,  2,	 0};
-	printf("\tTesting ft_strncmp\n");
-	i = 0;
 	int res_cmp;
 	int res_ft_cmp;
+
+	ft_ok = 1;
+	i = 0;
 	while (strs_cmp1[i])
 	{
 		res_cmp = strncmp(strs_cmp1[i], strs_cmp2[i], tab_cmp[i]);
@@ -253,6 +256,242 @@ int		ft_str_test(void)
 		printf(" -> %s", er_msg[er_no]);
 	}
 	printf("%s\n", ft_ok ? "\n\tOK" : "\n!!!!!!!!!!ft_strncmp: KO");
+	// STRCHR
+	printf("\tTesting ft_strchr\n");
+	char	haystack[] = "hello 2 the world \200d	";
+	char	needle[] = "z\n 2~ \200 \thl";
+
+	ft_ok = 1;
+	i = 0;
+	while (needle[i])
+	{
+
+		if (strchr(haystack, needle[i]) != ft_strchr(haystack, needle[i]))
+		{
+			printf("KO : \"haystack: \'%s\' <-> needle: \'%c\' <-> res: %s <-> ft_res: %s\"\n",
+				haystack, needle[i], strchr(haystack, needle[i]), ft_strchr(haystack, needle[i]));
+			ok = 0;
+			ft_ok = 0;
+		}
+		i++;
+	}
+	printf("\t\tTesting error handling");
+	er_no = check_diff_error("ft_strchr", 0);
+	if (er_no >= 0)
+	{
+		ft_ok = 0;
+		ok = 0;
+		printf(" -> %s", er_msg[er_no]);
+	}
+	printf("%s\n", ft_ok ? "\n\tOK" : "\n!!!!!!!!!!ft_strchr: KO");
+	// STRRCHR (re-using strchr's variable)
+	printf("\tTesting ft_strrchr\n");
+	ft_ok = 1;
+	i = 0;
+	while (needle[i])
+	{
+		if (strrchr(haystack, needle[i]) != ft_strrchr(haystack, needle[i]))
+		{
+			printf("KO : \"haystack: \'%s\' <-> needle: \'%c\' <-> res: %s <-> ft_res: %s\"\n",
+				haystack, needle[i], strrchr(haystack, needle[i]), ft_strrchr(haystack, needle[i]));
+			ok = 0;
+			ft_ok = 0;
+		}
+		i++;
+	}
+	printf("\t\tTesting error handling");
+	er_no = check_diff_error("ft_strrchr", 0);
+	if (er_no >= 0)
+	{
+		ft_ok = 0;
+		ok = 0;
+		printf(" -> %s", er_msg[er_no]);
+	}
+	printf("%s\n", ft_ok ? "\n\tOK" : "\n!!!!!!!!!!ft_strrchr: KO");
+	// STRLCPY
+	printf("\tTesting ft_strlcpy\n");
+	int		dst_cpy_sizes[]	= {0, 1, 2, 6, 9, 10, -1};
+	char	dst_cpy[10] = "abc\0\0\0";
+	char	dst_cpy_tmp[10], dst_cpy_ft_tmp[10];
+	char	**srcs_cpy	= (char *[]){"a", "abc", "a\0abc", "je suis un tout petit nan", "", "\0", NULL};
+	int		res_cpy, ft_res_cpy = 0;
+
+	ft_ok = 1;
+	i = 0;
+	strcpy(dst_cpy_tmp, dst_cpy);
+	strcpy(dst_cpy_ft_tmp, dst_cpy);
+	while (srcs_cpy[i])
+	{
+		j = 0;
+		while (dst_cpy_sizes[j] >= 0)
+		{
+			res_cpy = strlcpy(dst_cpy_tmp, srcs_cpy[i], dst_cpy_sizes[j]);
+			ft_res_cpy = ft_strlcpy(dst_cpy_ft_tmp, srcs_cpy[i], dst_cpy_sizes[j]);
+			if ((res_cpy != ft_res_cpy) || strcmp(dst_cpy_tmp, dst_cpy_ft_tmp))
+			{
+				printf("KO : \"dst: \'%s\' <-> src: \'%s\' <-> size_dst: %d -> res: %d <-> ft_res: %d -> dst_cpy: \'%s\' <-> ft_dst_cpy: \'%s\' \"\n",
+				dst_cpy, srcs_cpy[i], dst_cpy_sizes[j], res_cpy, ft_res_cpy, dst_cpy_tmp, dst_cpy_ft_tmp);
+				ok = 0;
+				ft_ok = 0;
+			}
+			j++;
+			strcpy(dst_cpy_tmp, dst_cpy);
+			strcpy(dst_cpy_ft_tmp, dst_cpy);
+		}
+		i++;
+	}
+	printf("\t\tTesting error handling");
+	er_no = check_diff_error("ft_strlcpy", 2);
+	if (er_no >= 0)
+	{
+		ft_ok = 0;
+		ok = 0;
+		printf(" -> %s", er_msg[er_no]);
+	}
+	printf("%s\n", ft_ok ? "\n\tOK" : "\n!!!!!!!!!!ft_strlcpy: KO");
+	// STRLCAT
+	printf("\tTesting ft_strlcat\n");
+	int		dst_cat_sizes[]	= {0, 1, 2, 6, 9, 10, -1};
+	char	dst_cat[10] = "abc\0\0\0";
+	char	dst_cat_tmp[10], dst_cat_ft_tmp[10];
+	char	**srcs_cat	= (char *[]){"a", "abc", "a\0abc", "je suis un tout petit nan", "", "\0", NULL};
+	int		res_cat, ft_res_cat = 0;
+
+	ft_ok = 1;
+	strcpy(dst_cat_tmp, dst_cat);
+	strcpy(dst_cat_ft_tmp, dst_cat);
+	i = 0;
+	while (srcs_cat[i])
+	{
+		j = 0;
+		while (dst_cat_sizes[j] >= 0)
+		{
+			res_cat = strlcat(dst_cat_tmp, srcs_cat[i], dst_cat_sizes[j]);
+			ft_res_cat = ft_strlcat(dst_cat_ft_tmp, srcs_cat[i], dst_cat_sizes[j]);
+			if ((res_cat != ft_res_cat) || strcmp(dst_cat_tmp, dst_cat_ft_tmp) != 0)
+			{
+				printf("KO : \"dst: \'%s\' <-> src: \'%s\' <-> size_dst: %d <-> res: %d <-> ft_res: %d <-> dst_cat: \'%s\' <-> ft_dst_cat: \'%s\'\"\n",
+				dst_cat, srcs_cat[i], dst_cat_sizes[j], res_cat, ft_res_cat, dst_cat_tmp, dst_cat_ft_tmp);
+				ok = 0;
+				ft_ok = 0;
+			}
+			j++;
+			strcpy(dst_cat_tmp, dst_cat);
+			strcpy(dst_cat_ft_tmp, dst_cat);
+		}
+		i++;
+	}
+	printf("\t\tTesting error handling");
+	er_no = check_diff_error("ft_strlcat", 2);
+	if (er_no >= 0)
+	{
+		ft_ok = 0;
+		ok = 0;
+		printf(" -> %s", er_msg[er_no]);
+	}
+	printf("%s\n", ft_ok ? "\n\tOK" : "\n!!!!!!!!!!ft_strlcat: KO");
+	// STRNSTR
+	printf("\tTesting ft_strnstr\n");
+	int		strnstr_len[]	= {0, 1, 2, 6, 9, 100, -1};
+	char	**haystacks	= (char *[]){"Ceci n'est pas une pipe.", "ozarabozaraboze", "a\0abc", "J'ai fait pipapipapou en LV2", "", "\0", NULL};
+	char	**needles	= (char *[]){"a", "aaaaa", "pe", ".", "", "C", "BWAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA", "pipapou", "une", "\0", NULL};
+	char	**needles2	= (char *[]){"a", "aaaaa", "pe", ".", "", "C", "BWAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA", "pipapou", "une", "\0", NULL};
+	char	*strnstr_tmp, *strnstr_ft_tmp;
+
+
+	ft_ok = 1;
+	i = 0;
+	while (haystacks[i])
+	{
+		j = 0;
+		while (needles[j])
+		{
+			k = 0;
+			while (strnstr_len[k] >= 0)
+			{
+				strnstr_tmp = strnstr(haystacks[i], needles[j], strnstr_len[k]);
+				strnstr_ft_tmp = ft_strnstr(haystacks[i], needles2[j], strnstr_len[k]);
+				if (((strnstr_tmp && !strnstr_ft_tmp) || (!strnstr_tmp && strnstr_ft_tmp)) ||
+					((strnstr_tmp && strnstr_ft_tmp) && strcmp(strnstr_tmp, strnstr_ft_tmp)))
+				{
+					printf("KO : \"haystack: \'%s\' <-> needle: \'%s\' <-> needle2: \'%s\' -> lenght: %d -> res: \'%s\' <-> ft_res: \'%s\'\"\n",
+					haystacks[i], needles[j], needles2[j], strnstr_len[k], strnstr_tmp, strnstr_ft_tmp);
+					ok = 0;
+					ft_ok = 0;
+				}
+				k++;
+			}
+			j++;
+		}
+		i++;
+	}
+	printf("\t\tTesting error handling");
+	er_no = check_diff_error("ft_strnstr", 0);
+	if (er_no >= 0)
+	{
+		ft_ok = 0;
+		ok = 0;
+		printf(" -> %s", er_msg[er_no]);
+	}
+	printf("%s\n", ft_ok ? "\n\tOK" : "\n!!!!!!!!!!ft_strnstr: KO");
+	// DUP
+	printf("\tTesting ft_strdup\n");
+	char	**strs_dup = (char *[]){"0", "124", "-124", INT_MIN_STR, INT_MAX_STR, "addazd", "", "a1",
+				"1a", "-a1", "\011", "\t+1", "\n-1", "\r1", "\va", "\b", "000000000000000110",
+				"  \t\n  \r\r\v\f-899",	"     32\0 ", "++876", "\200123", "123\200", "-+1", "+-1",
+				"\n          42 24", "42jk ", "      --s8", " -sfecf", "  +442", "  -4232", NULL};
+
+	ft_ok = 1;
+	i = 0;
+	while (strs_dup[i])
+	{
+		if (strcmp(strdup(strs_dup[i]), ft_strdup(strs_dup[i])))
+		{
+			printf("KO : str: \'%s\' -> str_dup: \'%s\' <-> ft_str_dup: \'%s\' \n", strs_dup[i], strdup(strs_dup[i]), ft_strdup(strs_dup[i]));
+			ok = 0;
+			ft_ok = 0;
+		}
+		i++;
+	}
+	printf("\t\tTesting error handling");
+	er_no = check_diff_error("ft_strdup", 0);
+	if (er_no >= 0)
+	{
+		ft_ok = 0;
+		ok = 0;
+		printf(" -> %s", er_msg[er_no]);
+	}
+	printf("%s\n", ft_ok ? "\n\tOK" : "\n!!!!!!!!!!ft_strlen: KO");
+	// JOIN
+	printf("\tTesting ft_strjoin\n");
+	char	**strs_join1 = (char *[]){"", "", "1", "abcd", "ABC\0D", NULL};
+	char	**strs_join2 = (char *[]){"", "1", "", "efgh", "EF\0G"};
+	char	**strs_join_res = (char *[]){"", "1", "1", "abcdefgh", "ABCEF"};
+	char	*str_join_tmp;
+
+	ft_ok = 1;
+	i = 0;
+	while (strs_join1[i])
+	{
+		str_join_tmp = ft_strjoin(strs_join1[i], strs_join2[i]);
+		if (strcmp(str_join_tmp, strs_join_res[i]))
+		{
+			printf("KO : s1: \'%s\' <-> s2: \'%s\' -> sjoin: \'%s\' <-> ft_sjoin: \'%s\'\n", strs_join1[i], strs_join2[i], strs_join_res[i], str_join_tmp);
+			ok = 0;
+			ft_ok = 0;
+		}
+		i++;
+	}
+	printf("\t\tTesting error handling");
+	er_no = check_diff_error("ft_strjoin", 0);
+	if (er_no >= 0)
+	{
+		ft_ok = 0;
+		ok = 0;
+		printf(" -> %s", er_msg[er_no]);
+	}
+	printf("%s\n", ft_ok ? "\n\tOK" : "\n!!!!!!!!!!ft_strlen: KO");
+	// RETURN VALUE
 	return (ok);
 }
 int		main(int ac, char **av)

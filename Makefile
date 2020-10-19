@@ -6,7 +6,7 @@
 #    By: pcottet <pcottet@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/10/12 11:10:28 by pcottet           #+#    #+#              #
-#    Updated: 2020/10/16 16:53:15 by pcottet          ###   ########.fr        #
+#    Updated: 2020/10/19 02:48:28 by pcottet          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -37,7 +37,8 @@ SRCS		= ${SRC_STR} ${SRC_STR_IS} ${SRC_STR_TO} ${SRC_PUT}		\
 
 SRCS_BONUS	= ${SRC_LIST}
 
-ifeq (${MAKECMDGOALS}, ${filter ${MAKECMDGOALS}, all reall})
+ifneq (${MAKECMDGOALS}, ${filter ${MAKECMDGOALS}, re})
+ifeq (${MAKECMDGOALS}, ${filter ${MAKECMDGOALS},all reall})
 	OBJS		= ${SRCS:.c=.o}
 
 	OBJS		+= ${SRCS_BONUS:.c=.o}
@@ -52,7 +53,9 @@ else ifeq (${MAKECMDGOALS}, bonus)
 	TARGET		= Bonus
 
 	TOTAL		= 9
-
+else
+	default		:=${shell echo "Unknown argument, try:\n all clean fclean re bonus reall test"}
+endif
 else
 	OBJS		= ${SRCS:.c=.o}
 
@@ -78,7 +81,7 @@ ${NAME}:	${OBJS}
 
 .c.o:
 			@echo -n '${COUNT}/${TOTAL} '
-			@${CC} ${CFLAGS} ${INCL} -c $< -o ${<:.c=.o}
+			@${CC} -c ${CFLAGS} ${INCL} $< -o ${<:.c=.o}
 			$(eval COUNT=$(shell echo $$(($(COUNT)+1))))
 
 bonus:		${NAME}
@@ -97,9 +100,14 @@ re:			fclean ${NAME}
 
 reall:		fclean all
 
+list:
+			@echo "List of all arguments:"
+			@echo "\t- make->(Build Library)\n\t- fclean->(Delete exec then clean)\n\t- clean->(Delete .o)\n\t- re->(fclean then make)\n\t- bonus->(Build only bonus)\n\
+\t- all->(Build Library and Bonus)\n\t- reall->(fclean then all)\n\t- test->(Build libft with main.c, check_diff_error.c and fsanitize g3)"
+
 test:
-			@${CC} -fsanitize=address -L. -lft main.c check_diff_error.c && ./a.out
+			@${CC} -fsanitize=address -g3 -L. -lft main.c check_diff_error.c && ./a.out
 # echo "You can run a.out to test everything or select which part you want to test with one of those arguments:\n"
 # echo "STR STR_IS STR_TO PUT MEM\nBONUS MORE"
 
-.PHONY:		all clean fclean re bonus reall
+.PHONY:		all clean fclean re bonus reall test list

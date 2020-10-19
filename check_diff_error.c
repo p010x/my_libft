@@ -6,7 +6,7 @@
 /*   By: pcottet <pcottet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/16 15:29:14 by pcottet           #+#    #+#             */
-/*   Updated: 2020/10/18 11:21:41 by pcottet          ###   ########.fr       */
+/*   Updated: 2020/10/19 02:42:37 by pcottet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,23 +33,12 @@ void segfault_sigaction(int signal, siginfo_t *si, void *arg)
 
 int		check_diff_error(char *ft_name, int option)
 {
-// int					ft_strlen(const char *s);
-// int					ft_strncmp(const char *s1, const char *s2, size_t n);
-// char				*ft_strchr(const char *s, int c);
-// char				*ft_strrchr(const char *s, int c);
-// size_t				ft_strlcpy(char *dst, const char *src, size_t dstsize);
-// size_t				ft_strlcat(char *dst, const char *src, size_t dstsize);
-// char				*ft_strnstr(const char *haystack, const char *needle,
-// 					size_t len);
-// char				*ft_strdup(const char *s1);
-// char				*ft_substr(char const *s, unsigned int start, size_t len);
-// char				*ft_strjoin(char const *s1, char const *s2);
-// char				*ft_strtrim(char const *s1, char const *set);
-// char				**ft_split(char const *s, char c);
-// char				*ft_strmapi(char const *s, char (*f)(unsigned int, char));
-
 CATCH_SEGFAULT()
 int is_seg = 0;
+char *str1, *str2 = NULL;
+char not_null_str[] = "test_str";
+int count = 0;
+
 if (!strcmp("ft_strlen", ft_name))
 {
 	if (sigsetjmp(mark,1) != 0)
@@ -98,20 +87,19 @@ else if (!strcmp("ft_strncmp", ft_name))
 	{
 		case 2:
 		{
-			char cmp1[] = "NULL";
-			char *cmp2 = NULL;
+			str1 = not_null_str;
 			break;
 		}
 		case 1:
 		{
-			char *cmp1 = NULL;
-			char cmp2[] = "NULL";
+			str2 = not_null_str;
 			break;
 		}
+		case 0:
+			break;
 		default:
 		{
-			char *cmp1 = NULL;
-			char *cmp2 = NULL;
+			printf("Error no matched case in switch");
 			break;
 		}
 	}
@@ -120,7 +108,36 @@ else if (!strcmp("ft_strncmp", ft_name))
 	  is_seg = 1;
     }
 	else
-		strncmp(cmp1, cmp2, 0);
+	{
+		strncmp(str1, str2, 0);
+	}
+	if (sigsetjmp(mark,1) != 0)
+	{
+	  if (!is_seg)
+	  {
+		  printf(" -> option: %d", option);
+		  return (1);
+	  }
+    }
+	else
+	{
+		ft_strncmp(str1, str2, 0);
+		if (is_seg)
+		{
+			printf(" -> option: %d", option);
+			return (2);
+		}
+	}
+	return (option ? check_diff_error("ft_strncmp", --option) : -1);
+}
+else if (!strcmp("ft_strchr", ft_name))
+{
+	if (sigsetjmp(mark,1) != 0)
+	{
+	  is_seg = 1;
+    }
+	else
+		strchr(NULL, 0);
 	if (sigsetjmp(mark,1) != 0)
 	{
 	  if (!is_seg)
@@ -128,11 +145,231 @@ else if (!strcmp("ft_strncmp", ft_name))
     }
 	else
 	{
-		ft_strncmp(cmp1, cmp2, 0);
+		ft_strchr(NULL, 0);
 		if (is_seg)
 			return (2);
 	}
-	return (option ? check_diff_error("ft_strncmp", --option) : -1);
+	return (-1);
+}
+else if (!strcmp("ft_strrchr", ft_name))
+{
+	if (sigsetjmp(mark,1) != 0)
+	{
+	  is_seg = 1;
+    }
+	else
+		strrchr(NULL, 0);
+	if (sigsetjmp(mark,1) != 0)
+	{
+	  if (!is_seg)
+		  return (1);
+    }
+	else
+	{
+		ft_strrchr(NULL, 0);
+		if (is_seg)
+			return (2);
+	}
+	return (-1);
+}
+else if (!strcmp("ft_strlcpy", ft_name))
+{
+	switch (option)
+	{
+		case 2:
+		{
+			str1 = not_null_str;
+			break;
+		}
+		case 1:
+		{
+			str2 = not_null_str;
+			break;
+		}
+		case 0:
+			break;
+		default:
+		{
+			printf("Error no matched case in switch");
+			break;
+		}
+	}
+	if (sigsetjmp(mark,1) != 0)
+	{
+	  is_seg = 1;
+    }
+	else
+	{
+		strncmp(str1, str2, 0);
+	}
+	if (sigsetjmp(mark,1) != 0)
+	{
+	  if (!is_seg)
+	  {
+		  printf(" -> option: %d", option);
+		  return (1);
+	  }
+    }
+	else
+	{
+		ft_strncmp(str1, str2, 0);
+		if (is_seg)
+		{
+			printf(" -> option: %d", option);
+			return (2);
+		}
+	}
+	return (option ? check_diff_error("ft_strlcpy", --option) : -1);
+}
+else if (!strcmp("ft_strlcat", ft_name))
+{
+	switch (option)
+	{
+		case 2:
+		{
+			str1 = not_null_str;
+			break;
+		}
+		case 1:
+		{
+			str2 = not_null_str;
+			break;
+		}
+		case 0:
+			break;
+		default:
+		{
+			printf("Error no matched case in switch");
+			break;
+		}
+	}
+	if (sigsetjmp(mark,1) != 0)
+	{
+	  is_seg = 1;
+    }
+	else
+	{
+		strlcat(str1, str2, 0);
+	}
+	if (sigsetjmp(mark,1) != 0)
+	{
+	  if (!is_seg)
+	  {
+		  printf(" -> option: %d (str1: \"%s\" str2: \"%s\")", option, str1, str2);
+		  return (1);
+	  }
+    }
+	else
+	{
+		ft_strlcat(str1, str2, 0);
+		if (is_seg)
+		{
+			printf(" -> option: %d", option);
+			return (2);
+		}
+	}
+	return (option ? check_diff_error("ft_strlcat", --option) : -1);
+}
+else if (!strcmp("ft_strnstr", ft_name))
+{
+	switch (option)
+	{
+		case 2:
+		{
+			str1 = not_null_str;
+			break;
+		}
+		case 1:
+		{
+			str2 = not_null_str;
+			break;
+		}
+		case 0:
+			break;
+		default:
+		{
+			printf("Error no matched case in switch");
+			break;
+		}
+	}
+	if (sigsetjmp(mark,1) != 0)
+	{
+	  is_seg = 1;
+    }
+	else
+	{
+		strnstr(str1, str2, 0);
+	}
+	if (sigsetjmp(mark,1) != 0)
+	{
+	  if (!is_seg)
+	  {
+		  printf(" -> option: %d (str1: \"%s\" str2: \"%s\")", option, str1, str2);
+		  return (1);
+	  }
+    }
+	else
+	{
+		ft_strnstr(str1, str2, 0);
+		if (is_seg)
+		{
+			printf(" -> option: %d", option);
+			return (2);
+		}
+	}
+	return (option ? check_diff_error("ft_strnstr", --option) : -1);
+}
+else if (!strcmp("ft_strdup", ft_name))
+{
+	if (sigsetjmp(mark,1) != 0)
+	{
+	  is_seg = 1;
+    }
+	else
+		strdup(NULL);
+	if (sigsetjmp(mark,1) != 0)
+	{
+	  if (!is_seg)
+		  return (1);
+    }
+	else
+	{
+		ft_strdup(NULL);
+		if (is_seg)
+			return (2);
+	}
+	return (-1);
+}
+else if (!strcmp("ft_strjoin", ft_name))
+{
+	switch (option)
+	{
+		case 2:
+		{
+			str1 = not_null_str;
+			break;
+		}
+		case 1:
+		{
+			str2 = not_null_str;
+			break;
+		}
+		case 0:
+			break;
+		default:
+		{
+			printf("Error no matched case in switch");
+			break;
+		}
+	}
+	if (sigsetjmp(mark,1) != 0)
+	{
+		printf(" -> option: %d (str1: \"%s\" str2: \"%s\")", option, str1, str2);
+			return (1);
+    }
+	else
+		ft_strjoin(str1, str2);
+	return (option ? check_diff_error("ft_strjoin", --option) : -1);
 }
 else
 	return (0);
