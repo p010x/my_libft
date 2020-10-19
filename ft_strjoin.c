@@ -6,7 +6,7 @@
 /*   By: pcottet <pcottet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/12 21:23:21 by pcottet           #+#    #+#             */
-/*   Updated: 2020/10/19 02:34:42 by pcottet          ###   ########.fr       */
+/*   Updated: 2020/10/19 17:47:49 by pcottet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ char		*ft_strjoin(char const *s1, char const *s2)
 	else if (!s2)
 		s2 = "";
 	if (!(ret_str = malloc(sizeof(*ret_str) *
-		(ft_strlen(s1) + ft_strlen(s2) + 4))))
+		(ft_strlen(s1) + ft_strlen(s2) + 1))))
 		return (NULL);
 	i = 0;
 	j = 0;

@@ -6,7 +6,7 @@
 /*   By: pcottet <pcottet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/12 22:59:37 by pcottet           #+#    #+#             */
-/*   Updated: 2020/10/16 01:16:55 by pcottet          ###   ########.fr       */
+/*   Updated: 2020/10/19 20:27:38 by pcottet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,8 @@ int			ft_count_words(char const *s, char c)
 	int		count_words;
 
 	i = 0;
-	count_words = 0;
-	while (s[i])
+	count_words = s ? 0 : -1;
+	while (s[i] && count_words >= 0)
 	{
 		while (s[i] == c && s[i])
 			i++;
@@ -30,7 +30,7 @@ int			ft_count_words(char const *s, char c)
 				i++;
 		}
 	}
-	return (count_words);
+	return (count_words ? count_words : 1);
 }
 
 char		**ft_split(char const *s, char c)
@@ -57,6 +57,8 @@ char		**ft_split(char const *s, char c)
 				return (NULL);
 		}
 	}
+	if (!index)
+		ret_strs[index] = "\0";
 	ret_strs[ft_count_words(s, c)] = NULL;
 	return (ret_strs);
 }

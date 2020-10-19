@@ -6,71 +6,71 @@
 /*   By: pcottet <pcottet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/12 21:38:18 by pcottet           #+#    #+#             */
-/*   Updated: 2020/10/16 01:20:34 by pcottet          ###   ########.fr       */
+/*   Updated: 2020/10/19 21:21:22 by pcottet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-int			ft_is_set(char c, char const *set)
+int         ft_is_set(char c, char const *set)
 {
-	int		i;
+    int i;
 
-	i = 0;
-	while (set[i])
-	{
-		if (set[i++] == c)
-			return (1);
-	}
-	return (0);
+    i = 0;
+    while (set[i])
+    {
+        if (set[i++] == c)
+            return (1);
+    }
+    return (0);
 }
 
-int			ft_count_set(char const *s1, char const *set)
+int         ft_count_set(char const *s1, char const *set)
 {
-	int		i;
-	int		count_set;
+    int     i;
+    int     count_set;
 
-	i = 0;
-	count_set = 0;
-	while (s1[i] && ft_is_set(s1[i], set))
-	{
-		count_set++;
-		i++;
-	}
-	i = ft_strlen(s1);
-	while (i && ft_is_set(s1[i], set))
-	{
-		count_set++;
-		i--;
-	}
-	return (count_set);
+    i = 0;
+    count_set = 0;
+    while (s1[i] && ft_is_set(s1[i], set))
+    {
+        count_set++;
+        i++;
+    }
+    i = ft_strlen(s1);
+    while (i && ft_is_set(s1[i], set))
+    {
+        count_set++;
+        i--;
+    }
+    return (count_set);
 }
 
-char		*ft_strtrim(char const *s1, char const *set)
+char        *ft_strtrim(char const *s1, char const *set)
 {
-	int		i;
-	int		j;
-	int		k;
-	char	*ret_str;
+    int     i;
+    int     j;
+    int     k;
+    char    *ret_str;
 
-	if (!(ret_str = malloc(sizeof(*s1) *
-		(ft_strlen(s1) - ft_count_set(s1, set) + 1))))
-		return (NULL);
-	i = 0;
-	while (s1[i] && ft_is_set(s1[i], set))
-		i++;
-	j = 0;
-	while (i >= 0 && s1[i])
-	{
-		ret_str[j++] = s1[i++];
-		k = 0;
-		while (i >= 0 && ft_is_set(s1[i + k], set))
-		{
-			if (!s1[i + k + 1])
-				i = -1;
-			k++;
-		}
-	}
-	ret_str[j] = '\0';
-	return (ret_str);
+    if (!(ret_str = malloc(sizeof(*s1) *
+        (ft_strlen(s1) - ft_count_set(s1, set) + 1))))
+        return (NULL);
+    i = 0;
+    while (s1[i] && ft_is_set(s1[i], set))
+        i++;
+    j = 0;
+    while (i >= 0 && s1[i])
+    {
+        ret_str[j++] = s1[i++];
+        k = 0;
+        while (i >= 0 && ft_is_set(s1[i + k], set))
+        {
+            if (!s1[i + k + 1])
+                i = -1;
+            k++;
+        }
+    }
+    ret_str[j] = '\0';
+    return (ret_str);
 }

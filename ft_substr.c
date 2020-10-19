@@ -6,7 +6,7 @@
 /*   By: pcottet <pcottet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/12 21:01:00 by pcottet           #+#    #+#             */
-/*   Updated: 2020/10/16 01:30:09 by pcottet          ###   ########.fr       */
+/*   Updated: 2020/10/19 17:57:10 by pcottet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,8 @@ char		*ft_substr(char const *s, unsigned int start, size_t len)
 	size_t		i;
 	size_t		j;
 
+	if (!s || start > (unsigned int)ft_strlen(s))
+		return ("\0");
 	i = 0;
 	while (s[i + start] && i < len)
 		i++;
